@@ -1,3 +1,4 @@
+//  src/app/register/page.jsx
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -14,7 +15,7 @@ export default function Register() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         body: JSON.stringify({
-          email: formData.get("email"),
+          phone: formData.get("phone"), // Changed from email to phone
           password: formData.get("password"),
           name: formData.get("name"),
         }),
@@ -63,13 +64,14 @@ export default function Register() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700 mb-2" htmlFor="email">
-            Email
+          <label className="block text-gray-700 mb-2" htmlFor="phone">
+            Phone Number
           </label>
           <input
-            type="email"
-            id="email"
-            name="email"
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="+1234567890"
             required
             className="w-full p-2 border rounded"
           />

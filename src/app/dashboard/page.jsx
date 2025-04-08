@@ -1,3 +1,4 @@
+//  src/app/dashboard/page.jsx
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -48,7 +49,7 @@ export default function Dashboard() {
               <h1 className="text-xl font-semibold">Dashboard</h1>
             </div>
             <div className="flex items-center">
-              <span className="mr-4">Welcome, {user.name || user.email}!</span>
+              <span className="mr-4">Welcome, {user.name || user.phone}!</span>
               <button
                 onClick={handleLogout}
                 className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
@@ -67,7 +68,7 @@ export default function Dashboard() {
             <h2 className="text-2xl font-bold mb-4">Your Dashboard</h2>
             <div className="bg-white shadow rounded-lg p-6">
               <div className="mb-4">
-                <p className="text-gray-600">Email: {user.email}</p>
+                <p className="text-gray-600">Phone: {user.phone}</p>
                 <p className="text-gray-600">
                   Member since: {new Date(user.createdAt).toLocaleDateString()}
                 </p>

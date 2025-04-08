@@ -1,32 +1,46 @@
+//  src/app/api/auth/register/route.js
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
+import { hashPassword } from "@/lib/bcrypt";
 
 export async function POST(request) {
   try {
-    const { email, password, name } = await request.json();
+    const { phone, password, name } = await request.json();
 
-    const existingUser = await db.user.findUnique({
-      where: { email },
-    });
-
-    if (existingUser) {
+    // Basic phone number validation
+    const phoneRegex = /^\+?[0-9]{10,15}$/;
+    if (!phoneRegex.test(phone)) {
       return NextResponse.json(
-        { error: "Email already registered" },
+        { error: "Invalid phone number format" },
         { status: 400 }
       );
     }
 
+    const existingUser = await db.user.findUnique({
+      where: { phone }, // Changed from email to phone
+    });
+
+    if (existingUser) {
+      return NextResponse.json(
+        { error: "Phone number already registered" },
+        { status: 400 }
+      );
+    }
+
+    // Hash the password
+    const hashedPassword = await hashPassword(password);
+
     const user = await db.user.create({
       data: {
-        email,
-        password, // In production, hash the password!
+        phone,
+        password: hashedPassword, // Store hashed password
         name,
       },
     });
 
     return NextResponse.json({
       message: "User registered successfully",
-      user: { id: user.id, email: user.email, name: user.name },
+      user: { id: user.id, phone: user.phone, name: user.name },
     });
   } catch (error) {
     return NextResponse.json(

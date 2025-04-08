@@ -1,16 +1,28 @@
+// src/app/api/auth/login/route.js
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { db } from "@/lib/db";
+import { comparePassword } from "@/lib/bcrypt";
 
 export async function POST(request) {
   try {
-    const { email, password } = await request.json();
+    const { phone, password } = await request.json();
 
     const user = await db.user.findUnique({
-      where: { email },
+      where: { phone }, // Changed from email to phone
     });
 
-    if (!user || user.password !== password) {
+    if (!user) {
+      return NextResponse.json(
+        { error: "Invalid credentials" },
+        { status: 401 }
+      );
+    }
+
+    // Use bcrypt to compare passwords
+    const isValidPassword = await comparePassword(password, user.password);
+
+    if (!isValidPassword) {
       return NextResponse.json(
         { error: "Invalid credentials" },
         { status: 401 }
@@ -27,7 +39,7 @@ export async function POST(request) {
 
     return NextResponse.json({
       message: "Logged in successfully",
-      user: { id: user.id, email: user.email, name: user.name },
+      user: { id: user.id, phone: user.phone, name: user.name },
     });
   } catch (error) {
     return NextResponse.json({ error: "Error logging in" }, { status: 500 });
