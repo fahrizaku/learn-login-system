@@ -1,4 +1,5 @@
 // src/app/api/auth/login/route.js
+
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { db } from "@/lib/db";
@@ -9,7 +10,7 @@ export async function POST(request) {
     const { phone, password } = await request.json();
 
     const user = await db.user.findUnique({
-      where: { phone }, // Changed from email to phone
+      where: { phone },
     });
 
     if (!user) {
@@ -29,6 +30,18 @@ export async function POST(request) {
       );
     }
 
+    // Check if user is verified
+    if (!user.verified) {
+      return NextResponse.json(
+        {
+          error: "Your account is pending verification",
+          verificationNeeded: true,
+          code: user.verificationCode, // For development
+        },
+        { status: 403 }
+      );
+    }
+
     // Set session cookie
     cookies().set("user_session", user.id, {
       httpOnly: true,
@@ -39,7 +52,12 @@ export async function POST(request) {
 
     return NextResponse.json({
       message: "Logged in successfully",
-      user: { id: user.id, phone: user.phone, name: user.name },
+      user: {
+        id: user.id,
+        phone: user.phone,
+        name: user.name,
+        role: user.role,
+      },
     });
   } catch (error) {
     return NextResponse.json({ error: "Error logging in" }, { status: 500 });

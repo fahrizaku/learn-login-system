@@ -3,12 +3,13 @@ import { NextResponse } from "next/server";
 export function middleware(request) {
   const userSession = request.cookies.get("user_session");
 
-  // Protected routes
+  // Protected routes including admin
   if (
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/profile") ||
     request.nextUrl.pathname.startsWith("/settings") ||
-    request.nextUrl.pathname.startsWith("/orders")
+    request.nextUrl.pathname.startsWith("/orders") ||
+    request.nextUrl.pathname.startsWith("/admin") // Added admin routes
   ) {
     if (!userSession) {
       return NextResponse.redirect(new URL("/login", request.url));
@@ -35,6 +36,7 @@ export const config = {
     "/profile/:path*",
     "/settings/:path*",
     "/orders/:path*",
+    "/admin/:path*", // Added admin routes
     "/login",
     "/register",
     "/forgot-password",

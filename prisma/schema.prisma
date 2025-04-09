@@ -14,10 +14,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  phone     String   @unique // Changed from email to phone
-  password  String
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String   @id @default(cuid())
+  phone           String   @unique
+  password        String
+  name            String?
+  role            String   @default("user") // Add role for admin users
+  verificationCode String?  // Store verification code
+  verified        Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
