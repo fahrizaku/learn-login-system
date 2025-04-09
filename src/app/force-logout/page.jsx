@@ -23,7 +23,7 @@ export default function ForceLogout() {
         }
 
         // Redirect to login
-        router.push("/login");
+        router.push("/auth/login");
       } catch (error) {
         console.error("Error during force logout:", error);
       }

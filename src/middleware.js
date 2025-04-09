@@ -6,21 +6,20 @@ export function middleware(request) {
   // Protected routes including admin
   if (
     request.nextUrl.pathname.startsWith("/dashboard") ||
-    request.nextUrl.pathname.startsWith("/profile") ||
     request.nextUrl.pathname.startsWith("/settings") ||
     request.nextUrl.pathname.startsWith("/orders") ||
     request.nextUrl.pathname.startsWith("/admin") // Added admin routes
   ) {
     if (!userSession) {
-      return NextResponse.redirect(new URL("/login", request.url));
+      return NextResponse.redirect(new URL("/auth/login", request.url));
     }
   }
 
   // Public routes when logged in
   if (
     userSession &&
-    (request.nextUrl.pathname === "/login" ||
-      request.nextUrl.pathname === "/register" ||
+    (request.nextUrl.pathname === "/auth/login" ||
+      request.nextUrl.pathname === "/auth/register" ||
       request.nextUrl.pathname === "/forgot-password" ||
       request.nextUrl.pathname === "/reset-password")
   ) {
@@ -37,8 +36,7 @@ export const config = {
     "/settings/:path*",
     "/orders/:path*",
     "/admin/:path*", // Added admin routes
-    "/login",
-    "/register",
+    "/auth/:path*",
     "/forgot-password",
     "/reset-password",
   ],

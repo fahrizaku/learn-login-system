@@ -1,4 +1,4 @@
-// src/app/register/page.jsx
+// src/app/auth/register/page.jsx
 
 "use client";
 import { useState } from "react";
@@ -41,7 +41,7 @@ export default function Register() {
         setUserId(data.userId);
         setStep(2); // Move to verification step
       } else {
-        router.push("/login");
+        router.push("/auth/login");
       }
     } catch (err) {
       setError(err.message);
@@ -73,7 +73,7 @@ export default function Register() {
       if (data.success) {
         setMessage("Account verified successfully! Redirecting to login...");
         setTimeout(() => {
-          router.push("/login");
+          router.push("/auth/login");
         }, 2000);
       }
     } catch (err) {
@@ -116,7 +116,7 @@ export default function Register() {
                   type="tel"
                   id="phone"
                   name="phone"
-                  placeholder="+1234567890"
+                  placeholder="08212345678"
                   required
                   className="w-full p-2 border rounded"
                 />

@@ -1,4 +1,4 @@
-// src/app/login/page.jsx
+// src/app/auth/login/page.jsx
 
 "use client";
 import { useState } from "react";
@@ -78,7 +78,7 @@ export default function Login() {
               type="tel"
               id="phone"
               name="phone"
-              placeholder="+1234567890"
+              placeholder="08212345678"
               required
               className="w-full p-2 border rounded"
             />

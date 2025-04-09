@@ -17,7 +17,7 @@ export default function Dashboard() {
         }
       })
       .catch(() => {
-        router.push("/login");
+        router.push("/auth/login");
       });
   }, [router]);
 
@@ -26,7 +26,7 @@ export default function Dashboard() {
       await fetch("/api/auth/logout", {
         method: "POST",
       });
-      router.push("/login");
+      router.push("/auth/login");
     } catch (error) {
       console.error("Error logging out:", error);
     }
